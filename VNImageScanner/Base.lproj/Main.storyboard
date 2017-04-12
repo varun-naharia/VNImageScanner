@@ -1,26 +1,140 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11134" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="JBJ-CY-OoA">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11106"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <capability name="Alignment constraints to the first baseline" minToolsVersion="6.0"/>
+        <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
-        <scene sceneID="tne-QT-ifu">
+        <scene sceneID="bJk-I3-gU5">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="JBJ-CY-OoA" customClass="ViewController" customModule="VNImageScanner" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
-                        <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
+                        <viewControllerLayoutGuide type="top" id="pAn-Gn-gDt"/>
+                        <viewControllerLayoutGuide type="bottom" id="cPU-G1-0B4"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                    <view key="view" contentMode="scaleToFill" id="gm3-43-9rn">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ika-24-1Vk" customClass="VNCameraScanner" customModule="VNImageScanner" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="57" width="375" height="610"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NIe-c4-6Rm">
+                                        <rect key="frame" x="135" y="577" width="89" height="25"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="89" id="A9V-hM-VT4"/>
+                                        </constraints>
+                                        <state key="normal" title="Filter"/>
+                                        <connections>
+                                            <action selector="filterToggle:" destination="JBJ-CY-OoA" eventType="touchUpInside" id="Z41-b5-uX7"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GI9-vq-cFw">
+                                        <rect key="frame" x="254" y="577" width="89" height="25"/>
+                                        <state key="normal" title="Crop On"/>
+                                        <connections>
+                                            <action selector="borderDetectToggle:" destination="JBJ-CY-OoA" eventType="touchUpInside" id="xa7-nx-vVk"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QXR-nS-Bx7">
+                                        <rect key="frame" x="16" y="577" width="89" height="25"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="25" id="hPn-nt-m2U"/>
+                                            <constraint firstAttribute="width" constant="89" id="nPf-VB-M9Z"/>
+                                        </constraints>
+                                        <state key="normal" title="Flash off"/>
+                                        <connections>
+                                            <action selector="torchToggle:" destination="JBJ-CY-OoA" eventType="touchUpInside" id="GZ5-ZI-tdY"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MoD-60-lRw">
+                                        <rect key="frame" x="149" y="509" width="60" height="60"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="60" id="Wci-Tt-rrD"/>
+                                            <constraint firstAttribute="width" constant="60" id="rTl-Fp-Tmu"/>
+                                        </constraints>
+                                        <state key="normal" backgroundImage="capture_button"/>
+                                        <connections>
+                                            <action selector="captureButton:" destination="JBJ-CY-OoA" eventType="touchUpInside" id="Fwd-Na-cmA"/>
+                                        </connections>
+                                    </button>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="focusIndicator" translatesAutoresizingMaskIntoConstraints="NO" id="hlh-nO-zJ7">
+                                        <rect key="frame" x="8" y="8" width="60" height="60"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="60" id="UXI-FS-hHV"/>
+                                            <constraint firstAttribute="width" constant="60" id="fs6-yE-nBp"/>
+                                        </constraints>
+                                    </imageView>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="NIe-c4-6Rm" firstAttribute="top" secondItem="GI9-vq-cFw" secondAttribute="top" id="2yj-tE-h3s"/>
+                                    <constraint firstItem="NIe-c4-6Rm" firstAttribute="top" secondItem="MoD-60-lRw" secondAttribute="bottom" constant="8" symbolic="YES" id="66l-Zw-eE2"/>
+                                    <constraint firstItem="QXR-nS-Bx7" firstAttribute="top" secondItem="NIe-c4-6Rm" secondAttribute="top" id="7uT-BR-6PP"/>
+                                    <constraint firstItem="QXR-nS-Bx7" firstAttribute="leading" secondItem="Ika-24-1Vk" secondAttribute="leading" constant="16" id="AsN-4N-XG4"/>
+                                    <constraint firstItem="hlh-nO-zJ7" firstAttribute="leading" secondItem="Ika-24-1Vk" secondAttribute="leadingMargin" id="FFC-2W-BTI"/>
+                                    <constraint firstItem="MoD-60-lRw" firstAttribute="centerX" secondItem="NIe-c4-6Rm" secondAttribute="centerX" id="JAS-h0-InI"/>
+                                    <constraint firstItem="NIe-c4-6Rm" firstAttribute="baseline" secondItem="GI9-vq-cFw" secondAttribute="baseline" id="LvA-L4-tuQ"/>
+                                    <constraint firstItem="GI9-vq-cFw" firstAttribute="leading" secondItem="NIe-c4-6Rm" secondAttribute="trailing" constant="30" id="NA0-2G-Nyj"/>
+                                    <constraint firstItem="NIe-c4-6Rm" firstAttribute="baseline" secondItem="QXR-nS-Bx7" secondAttribute="firstBaseline" id="OxN-Sx-rRh"/>
+                                    <constraint firstItem="QXR-nS-Bx7" firstAttribute="bottom" secondItem="Ika-24-1Vk" secondAttribute="bottomMargin" id="PyS-hD-EPs"/>
+                                    <constraint firstItem="QXR-nS-Bx7" firstAttribute="width" secondItem="NIe-c4-6Rm" secondAttribute="width" id="Rn1-Dv-ogR"/>
+                                    <constraint firstItem="GI9-vq-cFw" firstAttribute="width" secondItem="NIe-c4-6Rm" secondAttribute="width" id="SWa-Bj-QvP"/>
+                                    <constraint firstItem="QXR-nS-Bx7" firstAttribute="baseline" secondItem="NIe-c4-6Rm" secondAttribute="baseline" id="Zx7-l1-qRJ"/>
+                                    <constraint firstItem="QXR-nS-Bx7" firstAttribute="baseline" secondItem="NIe-c4-6Rm" secondAttribute="firstBaseline" id="fqh-gw-1Gq"/>
+                                    <constraint firstItem="NIe-c4-6Rm" firstAttribute="leading" secondItem="QXR-nS-Bx7" secondAttribute="trailing" constant="30" id="jXV-ni-hzG"/>
+                                    <constraint firstItem="hlh-nO-zJ7" firstAttribute="top" secondItem="Ika-24-1Vk" secondAttribute="topMargin" id="qfK-Fx-6O2"/>
+                                    <constraint firstAttribute="trailing" secondItem="GI9-vq-cFw" secondAttribute="trailing" constant="32" id="usK-KK-Cfv"/>
+                                    <constraint firstItem="NIe-c4-6Rm" firstAttribute="baseline" secondItem="GI9-vq-cFw" secondAttribute="firstBaseline" id="zyF-ZR-BZb"/>
+                                </constraints>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="BwD-DS-nt4" appends="YES" id="C7C-xA-5FK"/>
+                                </connections>
+                            </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QUt-dO-TQT">
+                                <rect key="frame" x="16" y="28" width="343" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="Ika-24-1Vk" firstAttribute="leading" secondItem="gm3-43-9rn" secondAttribute="leading" id="3Tv-vy-zQ5"/>
+                            <constraint firstAttribute="trailing" secondItem="Ika-24-1Vk" secondAttribute="trailing" id="9d1-a9-p3u"/>
+                            <constraint firstItem="QUt-dO-TQT" firstAttribute="top" secondItem="pAn-Gn-gDt" secondAttribute="bottom" constant="8" symbolic="YES" id="FxL-UV-boy"/>
+                            <constraint firstItem="QUt-dO-TQT" firstAttribute="centerX" secondItem="Ika-24-1Vk" secondAttribute="centerX" id="GIu-fQ-Hgr"/>
+                            <constraint firstItem="QUt-dO-TQT" firstAttribute="leading" secondItem="gm3-43-9rn" secondAttribute="leadingMargin" id="TpR-7i-kvK"/>
+                            <constraint firstItem="Ika-24-1Vk" firstAttribute="bottom" secondItem="cPU-G1-0B4" secondAttribute="top" id="sT7-iK-4Qu"/>
+                            <constraint firstItem="Ika-24-1Vk" firstAttribute="top" secondItem="QUt-dO-TQT" secondAttribute="bottom" constant="8" symbolic="YES" id="tyM-9N-T0F"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="cameraViewController" destination="Ika-24-1Vk" id="Ww3-lf-yFi"/>
+                        <outlet property="focusIndicator" destination="hlh-nO-zJ7" id="CDh-s3-VBC"/>
+                        <outlet property="titleLabel" destination="QUt-dO-TQT" id="Fmm-Ma-DlZ"/>
+                    </connections>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Lrv-5Y-bJW" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="BwD-DS-nt4">
+                    <connections>
+                        <action selector="focusGesture:" destination="JBJ-CY-OoA" id="e0c-fv-a98"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
+            <point key="canvasLocation" x="197.59999999999999" y="-152.47376311844079"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="capture_button" width="66" height="66"/>
+        <image name="focusIndicator" width="75" height="75"/>
+    </resources>
 </document>

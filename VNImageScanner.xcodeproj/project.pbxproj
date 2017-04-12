@@ -9,12 +9,14 @@
 /* Begin PBXBuildFile section */
 		AB6229B31E9CF37A00CB9510 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB6229B21E9CF37A00CB9510 /* AppDelegate.swift */; };
 		AB6229B51E9CF37A00CB9510 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB6229B41E9CF37A00CB9510 /* ViewController.swift */; };
-		AB6229B81E9CF37A00CB9510 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AB6229B61E9CF37A00CB9510 /* Main.storyboard */; };
 		AB6229BB1E9CF37A00CB9510 /* VNImageScanner.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = AB6229B91E9CF37A00CB9510 /* VNImageScanner.xcdatamodeld */; };
 		AB6229BD1E9CF37A00CB9510 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AB6229BC1E9CF37A00CB9510 /* Assets.xcassets */; };
 		AB6229C01E9CF37A00CB9510 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AB6229BE1E9CF37A00CB9510 /* LaunchScreen.storyboard */; };
 		AB6229CB1E9CF37B00CB9510 /* VNImageScannerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB6229CA1E9CF37B00CB9510 /* VNImageScannerTests.swift */; };
 		AB6229D61E9CF37B00CB9510 /* VNImageScannerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB6229D51E9CF37B00CB9510 /* VNImageScannerUITests.swift */; };
+		AB6229E51E9CFD9000CB9510 /* VNCameraScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB6229E41E9CFD9000CB9510 /* VNCameraScanner.swift */; };
+		AB84312A1E9E40EF002D0CA1 /* VNCameraScanner.xib in Resources */ = {isa = PBXBuildFile; fileRef = AB8431291E9E40EF002D0CA1 /* VNCameraScanner.xib */; };
+		AB84312D1E9E4C02002D0CA1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AB84312B1E9E4C02002D0CA1 /* Main.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,7 +40,6 @@
 		AB6229AF1E9CF37A00CB9510 /* VNImageScanner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VNImageScanner.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AB6229B21E9CF37A00CB9510 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		AB6229B41E9CF37A00CB9510 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		AB6229B71E9CF37A00CB9510 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		AB6229BA1E9CF37A00CB9510 /* VNImageScanner.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = VNImageScanner.xcdatamodel; sourceTree = "<group>"; };
 		AB6229BC1E9CF37A00CB9510 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AB6229BF1E9CF37A00CB9510 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -49,6 +50,9 @@
 		AB6229D11E9CF37B00CB9510 /* VNImageScannerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VNImageScannerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		AB6229D51E9CF37B00CB9510 /* VNImageScannerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VNImageScannerUITests.swift; sourceTree = "<group>"; };
 		AB6229D71E9CF37B00CB9510 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AB6229E41E9CFD9000CB9510 /* VNCameraScanner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VNCameraScanner.swift; sourceTree = "<group>"; };
+		AB8431291E9E40EF002D0CA1 /* VNCameraScanner.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VNCameraScanner.xib; sourceTree = "<group>"; };
+		AB84312C1E9E4C02002D0CA1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,10 +103,11 @@
 		AB6229B11E9CF37A00CB9510 /* VNImageScanner */ = {
 			isa = PBXGroup;
 			children = (
+				AB6229E31E9CFD5B00CB9510 /* VNCameraScanner */,
 				AB6229B21E9CF37A00CB9510 /* AppDelegate.swift */,
 				AB6229B41E9CF37A00CB9510 /* ViewController.swift */,
-				AB6229B61E9CF37A00CB9510 /* Main.storyboard */,
 				AB6229BC1E9CF37A00CB9510 /* Assets.xcassets */,
+				AB84312B1E9E4C02002D0CA1 /* Main.storyboard */,
 				AB6229BE1E9CF37A00CB9510 /* LaunchScreen.storyboard */,
 				AB6229C11E9CF37A00CB9510 /* Info.plist */,
 				AB6229B91E9CF37A00CB9510 /* VNImageScanner.xcdatamodeld */,
@@ -126,6 +131,15 @@
 				AB6229D71E9CF37B00CB9510 /* Info.plist */,
 			);
 			path = VNImageScannerUITests;
+			sourceTree = "<group>";
+		};
+		AB6229E31E9CFD5B00CB9510 /* VNCameraScanner */ = {
+			isa = PBXGroup;
+			children = (
+				AB6229E41E9CFD9000CB9510 /* VNCameraScanner.swift */,
+				AB8431291E9E40EF002D0CA1 /* VNCameraScanner.xib */,
+			);
+			path = VNCameraScanner;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -196,7 +210,7 @@
 				TargetAttributes = {
 					AB6229AE1E9CF37A00CB9510 = {
 						CreatedOnToolsVersion = 8.2;
-						DevelopmentTeam = 2658J76W2S;
+						DevelopmentTeam = 5868D9WJQQ;
 						ProvisioningStyle = Automatic;
 					};
 					AB6229C51E9CF37B00CB9510 = {
@@ -240,7 +254,8 @@
 			files = (
 				AB6229C01E9CF37A00CB9510 /* LaunchScreen.storyboard in Resources */,
 				AB6229BD1E9CF37A00CB9510 /* Assets.xcassets in Resources */,
-				AB6229B81E9CF37A00CB9510 /* Main.storyboard in Resources */,
+				AB84312A1E9E40EF002D0CA1 /* VNCameraScanner.xib in Resources */,
+				AB84312D1E9E4C02002D0CA1 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -268,6 +283,7 @@
 				AB6229B51E9CF37A00CB9510 /* ViewController.swift in Sources */,
 				AB6229BB1E9CF37A00CB9510 /* VNImageScanner.xcdatamodeld in Sources */,
 				AB6229B31E9CF37A00CB9510 /* AppDelegate.swift in Sources */,
+				AB6229E51E9CFD9000CB9510 /* VNCameraScanner.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -303,20 +319,20 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		AB6229B61E9CF37A00CB9510 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				AB6229B71E9CF37A00CB9510 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		AB6229BE1E9CF37A00CB9510 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				AB6229BF1E9CF37A00CB9510 /* Base */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		AB84312B1E9E4C02002D0CA1 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				AB84312C1E9E4C02002D0CA1 /* Base */,
+			);
+			name = Main.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -419,10 +435,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = 2658J76W2S;
+				DEVELOPMENT_TEAM = 5868D9WJQQ;
 				INFOPLIST_FILE = VNImageScanner/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.varunnaharia.VNImageScanner;
+				PRODUCT_BUNDLE_IDENTIFIER = com.logictrixtech.maxting;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 			};
@@ -432,10 +448,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = 2658J76W2S;
+				DEVELOPMENT_TEAM = 5868D9WJQQ;
 				INFOPLIST_FILE = VNImageScanner/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.varunnaharia.VNImageScanner;
+				PRODUCT_BUNDLE_IDENTIFIER = com.logictrixtech.maxting;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 			};
@@ -518,6 +534,7 @@
 				AB6229DC1E9CF37B00CB9510 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		AB6229DD1E9CF37B00CB9510 /* Build configuration list for PBXNativeTarget "VNImageScannerTests" */ = {
 			isa = XCConfigurationList;
@@ -526,6 +543,7 @@
 				AB6229DF1E9CF37B00CB9510 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		AB6229E01E9CF37B00CB9510 /* Build configuration list for PBXNativeTarget "VNImageScannerUITests" */ = {
 			isa = XCConfigurationList;
@@ -534,6 +552,7 @@
 				AB6229E21E9CF37B00CB9510 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 
