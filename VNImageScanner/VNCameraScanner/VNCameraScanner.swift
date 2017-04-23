@@ -22,11 +22,19 @@ enum VNCameraViewType : Int {
     case normal
 }
 
-class VNRectangleFeature: NSObject {
-    var topLeft = CGPoint.zero
-    var topRight = CGPoint.zero
-    var bottomRight = CGPoint.zero
-    var bottomLeft = CGPoint.zero
+class VNRectangleFeature: CIFeature {
+    open var topLeft = CGPoint.zero
+    open var topRight = CGPoint.zero
+    open var bottomRight = CGPoint.zero
+    open var bottomLeft = CGPoint.zero
+    
+    
+    func setValue(topLeft:CGPoint, topRight:CGPoint, bottomLeft:CGPoint, bottomRight:CGPoint) {
+        self.topLeft = topLeft
+        self.topRight = topRight
+        self.bottomLeft = bottomLeft
+        self.bottomRight = bottomLeft
+    }
 }
 class VNCameraScanner:UIView, AVCaptureVideoDataOutputSampleBufferDelegate {
     var captureSession: AVCaptureSession?
@@ -172,7 +180,12 @@ class VNCameraScanner:UIView, AVCaptureVideoDataOutputSampleBufferDelegate {
         }
         if isEnableBorderDetection {
             if borderDetectFrame {
-                borderDetectLastRectangleFeature = biggestRectangle(inRectangles: (highAccuracyRectangleDetector()?.features(in: image))!)
+                let rectFet = biggestRectangle(inRectangles: (highAccuracyRectangleDetector()?.features(in: image))!)
+                borderDetectLastRectangleFeature?.bottomLeft = (rectFet?.bottomLeft)!
+                borderDetectLastRectangleFeature?.bottomRight = (rectFet?.bottomRight)!
+                borderDetectLastRectangleFeature?.topLeft = (rectFet?.topLeft)!
+                borderDetectLastRectangleFeature?.topRight = (rectFet?.topRight)!
+                
                 borderDetectFrame = false
             }
             if (borderDetectLastRectangleFeature != nil) {
@@ -234,7 +247,7 @@ class VNCameraScanner:UIView, AVCaptureVideoDataOutputSampleBufferDelegate {
         return biggestRectangle
     }
     
-    func biggestRectangle(inRectangles rectangles: [Any]) -> CIRectangleFeature? {
+    func biggestRectangle(inRectangles rectangles: [Any]) -> VNRectangleFeature? {
         let rectangleFeature: CIRectangleFeature? = _biggestRectangle(inRectangles: rectangles)
         if rectangleFeature == nil {
             return nil
@@ -267,7 +280,7 @@ class VNCameraScanner:UIView, AVCaptureVideoDataOutputSampleBufferDelegate {
         rectangleFeatureMutable.topRight = (sortedPoints[2] as AnyObject).endPoint
         rectangleFeatureMutable.bottomRight = (sortedPoints[1] as AnyObject).endPoint
         rectangleFeatureMutable.bottomLeft = (sortedPoints[0] as AnyObject).endPoint
-        return rectangleFeatureMutable as? CIRectangleFeature
+        return rectangleFeatureMutable
     }
     
     func highAccuracyRectangleDetector() -> CIDetector? {
@@ -395,7 +408,13 @@ class VNCameraScanner:UIView, AVCaptureVideoDataOutputSampleBufferDelegate {
                     enhancedImage = self.filteredImageUsingContrastFilter(on: enhancedImage!)
                 }
                 if (weakSelf?.isEnableBorderDetection)! && self.rectangleDetectionConfidenceHighEnough(confidence: Float(self.imageDedectionConfidence)) {
-                    let rectangleFeature: VNRectangleFeature? = self.biggestRectangle(inRectangles: (self.highAccuracyRectangleDetector()?.features(in: enhancedImage!))!)
+                    let rectFet = self.biggestRectangle(inRectangles: (self.highAccuracyRectangleDetector()?.features(in: enhancedImage!))!)
+                    let rectangleFeature: VNRectangleFeature? = VNRectangleFeature()
+                    rectangleFeature?.bottomLeft = (rectFet?.bottomLeft)!
+                    rectangleFeature?.bottomRight = (rectFet?.bottomRight)!
+                    rectangleFeature?.topLeft = (rectFet?.topLeft)!
+                    rectangleFeature?.topRight = (rectFet?.topRight)!
+                    
                     if rectangleFeature != nil {
                         enhancedImage = self.correctPerspective(for: enhancedImage!, withFeatures: rectangleFeature!)
                     }
@@ -483,3 +502,13 @@ public extension DispatchQueue {
     
     
 }
+
+//extension CIRectangleFeature {
+//    
+//    convenience init(rectangleFeature feature: CIRectangleFeature) {
+//        self.topLeft = feature.topLeft
+//        self.topRight = feature.topRight
+//        self.bottomRight = feature.bottomRight
+//        self.bottomLeft = feature.bottomLeft
+//    }
+//}
