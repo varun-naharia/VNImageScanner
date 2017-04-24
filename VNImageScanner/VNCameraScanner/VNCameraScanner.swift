@@ -29,11 +29,13 @@ class VNRectangleFeature: CIFeature {
     open var bottomLeft = CGPoint.zero
     
     
-    func setValue(topLeft:CGPoint, topRight:CGPoint, bottomLeft:CGPoint, bottomRight:CGPoint) {
-        self.topLeft = topLeft
-        self.topRight = topRight
-        self.bottomLeft = bottomLeft
-        self.bottomRight = bottomLeft
+    class func setValue(topLeft:CGPoint, topRight:CGPoint, bottomLeft:CGPoint, bottomRight:CGPoint) -> VNRectangleFeature {
+        let obj:VNRectangleFeature = VNRectangleFeature()
+        obj.topLeft = topLeft
+        obj.topRight = topRight
+        obj.bottomLeft = bottomLeft
+        obj.bottomRight = bottomLeft
+        return obj
     }
 }
 class VNCameraScanner:UIView, AVCaptureVideoDataOutputSampleBufferDelegate {
@@ -164,6 +166,7 @@ class VNCameraScanner:UIView, AVCaptureVideoDataOutputSampleBufferDelegate {
     }
     
     func captureOutput(_ captureOutput: AVCaptureOutput, didOutputSampleBuffer sampleBuffer: CMSampleBuffer?, from connection: AVCaptureConnection) {
+        
         if isForceStop {
             return
         }
@@ -180,15 +183,10 @@ class VNCameraScanner:UIView, AVCaptureVideoDataOutputSampleBufferDelegate {
         }
         if isEnableBorderDetection {
             if borderDetectFrame {
-                let rectFet = biggestRectangle(inRectangles: (highAccuracyRectangleDetector()?.features(in: image))!)
-                borderDetectLastRectangleFeature?.bottomLeft = (rectFet?.bottomLeft)!
-                borderDetectLastRectangleFeature?.bottomRight = (rectFet?.bottomRight)!
-                borderDetectLastRectangleFeature?.topLeft = (rectFet?.topLeft)!
-                borderDetectLastRectangleFeature?.topRight = (rectFet?.topRight)!
-                
+                borderDetectLastRectangleFeature = biggestRectangle(inRectangles: (highAccuracyRectangleDetector()?.features(in: image))!)
                 borderDetectFrame = false
             }
-            if (borderDetectLastRectangleFeature != nil) {
+            if (borderDetectLastRectangleFeature?.bottomLeft != nil) {
                 imageDedectionConfidence += 0.5
                 image = drawHighlightOverlay(forPoints: image, topLeft: (borderDetectLastRectangleFeature?.topLeft)!, topRight: (borderDetectLastRectangleFeature?.topRight)!, bottomLeft: (borderDetectLastRectangleFeature?.bottomLeft)!, bottomRight: (borderDetectLastRectangleFeature?.bottomRight)!)
             }
@@ -276,10 +274,10 @@ class VNCameraScanner:UIView, AVCaptureVideoDataOutputSampleBufferDelegate {
         }
         let sortedPoints = points.sorted{angle($0!) < angle($1!)}
         let rectangleFeatureMutable = VNRectangleFeature()
-        rectangleFeatureMutable.topLeft = (sortedPoints[3] as AnyObject).endPoint
-        rectangleFeatureMutable.topRight = (sortedPoints[2] as AnyObject).endPoint
-        rectangleFeatureMutable.bottomRight = (sortedPoints[1] as AnyObject).endPoint
-        rectangleFeatureMutable.bottomLeft = (sortedPoints[0] as AnyObject).endPoint
+        rectangleFeatureMutable.topLeft = sortedPoints[3]!
+        rectangleFeatureMutable.topRight = sortedPoints[2]!
+        rectangleFeatureMutable.bottomRight = sortedPoints[1]!
+        rectangleFeatureMutable.bottomLeft = sortedPoints[0]!
         return rectangleFeatureMutable
     }
     
@@ -395,10 +393,11 @@ class VNCameraScanner:UIView, AVCaptureVideoDataOutputSampleBufferDelegate {
                 self.captureQueue.resume()
                 return
             }
-            let filePath: String = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("vn_img_\(Int(Date().timeIntervalSince1970)).jpeg").absoluteString
+            let filePath: String =  NSTemporaryDirectory().stringByAppendingPathComponent(path: "vn_img_\(Int(Date().timeIntervalSince1970)).jpeg")//URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("vn_img_\(Int(Date().timeIntervalSince1970)).jpeg").absoluteString
             
             autoreleasepool {
                 var imageData: Data? = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(imageSampleBuffer)
+                let image:UIImage = UIImage(data: imageData!)!
                 var enhancedImage = CIImage(data: imageData!, options: [kCIImageColorSpace: NSNull()])
                 imageData = nil
                 if weakSelf?.cameraViewType == VNCameraViewType.blackAndWhite {
@@ -408,12 +407,12 @@ class VNCameraScanner:UIView, AVCaptureVideoDataOutputSampleBufferDelegate {
                     enhancedImage = self.filteredImageUsingContrastFilter(on: enhancedImage!)
                 }
                 if (weakSelf?.isEnableBorderDetection)! && self.rectangleDetectionConfidenceHighEnough(confidence: Float(self.imageDedectionConfidence)) {
-                    let rectFet = self.biggestRectangle(inRectangles: (self.highAccuracyRectangleDetector()?.features(in: enhancedImage!))!)
-                    let rectangleFeature: VNRectangleFeature? = VNRectangleFeature()
-                    rectangleFeature?.bottomLeft = (rectFet?.bottomLeft)!
-                    rectangleFeature?.bottomRight = (rectFet?.bottomRight)!
-                    rectangleFeature?.topLeft = (rectFet?.topLeft)!
-                    rectangleFeature?.topRight = (rectFet?.topRight)!
+                    let rectangleFeature = self.biggestRectangle(inRectangles: (self.highAccuracyRectangleDetector()?.features(in: enhancedImage!))!)
+//                    let rectangleFeature: VNRectangleFeature? = VNRectangleFeature()
+//                    rectangleFeature?.bottomLeft = (rectFet?.bottomLeft)!
+//                    rectangleFeature?.bottomRight = (rectFet?.bottomRight)!
+//                    rectangleFeature?.topLeft = (rectFet?.topLeft)!
+//                    rectangleFeature?.topRight = (rectFet?.topRight)!
                     
                     if rectangleFeature != nil {
                         enhancedImage = self.correctPerspective(for: enhancedImage!, withFeatures: rectangleFeature!)
@@ -462,10 +461,14 @@ class VNCameraScanner:UIView, AVCaptureVideoDataOutputSampleBufferDelegate {
     
     func saveCGImageAsJPEGToFilePath(imgRef:CGImage, filePath:String){
         
-            let url: CFURL? = URL(fileURLWithPath: filePath) as CFURL?
-            let destination: CGImageDestination = CGImageDestinationCreateWithURL(url!, kUTTypeJPEG, 1, nil)!
+            let url: CFURL? = URL(fileURLWithPath: filePath) as CFURL
+        if(url != nil)
+        {
+            guard let destination = CGImageDestinationCreateWithURL(url!, kUTTypePNG, 1, nil) else { print("error")
+            return}
             CGImageDestinationAddImage(destination, imgRef, nil)
             CGImageDestinationFinalize(destination)
+        }
     }
     
     func correctPerspective(for image: CIImage, withFeatures rectangleFeature: VNRectangleFeature) -> CIImage {
@@ -501,6 +504,13 @@ public extension DispatchQueue {
     }
     
     
+}
+
+extension String {
+    func stringByAppendingPathComponent(path: String) -> String {
+        let nsSt = self as NSString
+        return nsSt.appendingPathComponent(path)
+    }
 }
 
 //extension CIRectangleFeature {
