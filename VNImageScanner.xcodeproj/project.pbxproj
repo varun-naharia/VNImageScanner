@@ -210,7 +210,7 @@
 				TargetAttributes = {
 					AB6229AE1E9CF37A00CB9510 = {
 						CreatedOnToolsVersion = 8.2;
-						DevelopmentTeam = 5868D9WJQQ;
+						DevelopmentTeam = 2658J76W2S;
 						ProvisioningStyle = Automatic;
 					};
 					AB6229C51E9CF37B00CB9510 = {
@@ -435,10 +435,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = 5868D9WJQQ;
+				DEVELOPMENT_TEAM = 2658J76W2S;
 				INFOPLIST_FILE = VNImageScanner/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.logictrixtech.maxting;
+				PRODUCT_BUNDLE_IDENTIFIER = com.technaharia.VNImageScanner;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 			};
@@ -448,10 +448,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = 5868D9WJQQ;
+				DEVELOPMENT_TEAM = 2658J76W2S;
 				INFOPLIST_FILE = VNImageScanner/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.logictrixtech.maxting;
+				PRODUCT_BUNDLE_IDENTIFIER = com.technaharia.VNImageScanner;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 			};
