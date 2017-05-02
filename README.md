@@ -1,7 +1,3 @@
-# VNImageScanner
-<img src="https://travis-ci.org/varun-naharia/VNImageScanner.svg?branch=master">
-Code is based on <a href="https://github.com/mmackh/IPDFCameraViewController" >IPDFCameraViewController</a>. Improvements are needed so pull resqest are welcome.
-
 ![Screenshot](https://raw.githubusercontent.com/mmackh/IPDFCameraViewController/master/mockup.png)
 
 # VNImageScanner
@@ -35,3 +31,5 @@ Varun Naharia | Stackoverflow: [varun-naharia](http://stackoverflow.com/users/38
  - Include more filters
  - Smoother animation between border detection frames
  - Improve confidence
+ 
+ Improvements are needed so pull resqest are welcome.
