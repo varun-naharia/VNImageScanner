@@ -77,11 +77,11 @@ class VNCameraScanner:UIView, AVCaptureVideoDataOutputSampleBufferDelegate {
         captureQueue = DispatchQueue(label: "com.instapdf.AVCameraCaptureQueue")
     }
     
-    func _backgroundMode() {
+    @objc func _backgroundMode() {
         isForceStop = true
     }
     
-    func _foregroundMode() {
+    @objc func _foregroundMode() {
         isForceStop = false
     }
     deinit {
@@ -105,7 +105,7 @@ class VNCameraScanner:UIView, AVCaptureVideoDataOutputSampleBufferDelegate {
     }
     func setupCameraView() {
         createGLKView()
-        let possibleDevices: [Any] = AVCaptureDevice.devices(withMediaType: AVMediaTypeVideo)
+        let possibleDevices: [Any] = AVCaptureDevice.devices(for: AVMediaType.video)
         let device: AVCaptureDevice? = possibleDevices.first as! AVCaptureDevice?
         if device == nil {
             return
@@ -116,18 +116,18 @@ class VNCameraScanner:UIView, AVCaptureVideoDataOutputSampleBufferDelegate {
         session.beginConfiguration()
         captureDevice = device
         var error: Error? = nil
-        let input = try? AVCaptureDeviceInput(device: device)
-        session.sessionPreset = AVCaptureSessionPresetPhoto
-        session.addInput(input)
+        let input = try? AVCaptureDeviceInput(device: device!)
+        session.sessionPreset = AVCaptureSession.Preset.photo
+        session.addInput(input!)
         let dataOutput = AVCaptureVideoDataOutput()
         dataOutput.alwaysDiscardsLateVideoFrames = true
-        dataOutput.videoSettings = [kCVPixelBufferPixelFormatTypeKey as AnyHashable: kCVPixelFormatType_32BGRA]
+        dataOutput.videoSettings = [kCVPixelBufferPixelFormatTypeKey as AnyHashable as! String: kCVPixelFormatType_32BGRA]
         dataOutput.setSampleBufferDelegate(self, queue: captureQueue)
         session.addOutput(dataOutput)
         
         stillImageOutput = AVCaptureStillImageOutput()
-        session.addOutput(stillImageOutput)
-        let connection: AVCaptureConnection? = dataOutput.connections.first as! AVCaptureConnection?
+        session.addOutput(stillImageOutput!)
+        let connection: AVCaptureConnection? = dataOutput.connections.first 
         connection?.videoOrientation = .portrait
         if (device?.isFlashAvailable)! {
             do{
@@ -165,15 +165,15 @@ class VNCameraScanner:UIView, AVCaptureVideoDataOutputSampleBufferDelegate {
         })
     }
     
-    func captureOutput(_ captureOutput: AVCaptureOutput, didOutputSampleBuffer sampleBuffer: CMSampleBuffer?, from connection: AVCaptureConnection) {
+    func captureOutput(_ captureOutput: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         
         if isForceStop {
             return
         }
-        if isStopped || isCapturing || !CMSampleBufferIsValid(sampleBuffer!) {
+        if isStopped || isCapturing || !CMSampleBufferIsValid(sampleBuffer) {
             return
         }
-        let pixelBuffer: CVPixelBuffer? = CMSampleBufferGetImageBuffer(sampleBuffer!)!
+        let pixelBuffer: CVPixelBuffer? = CMSampleBufferGetImageBuffer(sampleBuffer)!
         var image = CIImage(cvPixelBuffer: pixelBuffer!)
         if cameraViewType != VNCameraViewType.normal {
             image = filteredImageUsingEnhanceFilter(on: image)
@@ -201,7 +201,10 @@ class VNCameraScanner:UIView, AVCaptureVideoDataOutputSampleBufferDelegate {
                 EAGLContext.setCurrent(context)
             }
             glkView?.bindDrawable()
-            coreImageContext?.draw(image, in: self.bounds, from: self.cropRect(forPreviewImage: image))
+            DispatchQueue.main.sync {
+                coreImageContext?.draw(image, in: self.bounds, from: self.cropRect(forPreviewImage: image))
+            }
+            
             glkView?.display()
             
             if(intrinsicContentSize.width != image.extent.size.width) {
@@ -262,10 +265,14 @@ class VNCameraScanner:UIView, AVCaptureVideoDataOutputSampleBufferDelegate {
         var minimum = points[0]
         var maximum = points[0]
         for point in points {
-            minimum?.x = min((minimum?.x)!, (point?.x)!)
-            minimum?.y = min((minimum?.y)!, (point?.y)!)
-            maximum?.x = max((maximum?.x)!, (point?.x)!)
-            maximum?.y = max((maximum?.y)!, (point?.y)!)
+            let minx = min((minimum?.x)!, (point?.x)!)
+            let miny = min((minimum?.y)!, (point?.y)!)
+            let maxx = max((maximum?.x)!, (point?.x)!)
+            let maxy = max((maximum?.y)!, (point?.y)!)
+            minimum?.x = minx
+            minimum?.y = miny
+            maximum?.x = maxx
+            maximum?.y = maxy
         }
         let center = CGPoint(x: ((minimum?.x)! + (maximum?.x)!) / 2, y: ((minimum?.y)! + (maximum?.y)!) / 2)
         let angle = { (point: CGPoint) -> CGFloat in
@@ -289,9 +296,9 @@ class VNCameraScanner:UIView, AVCaptureVideoDataOutputSampleBufferDelegate {
     
     func drawHighlightOverlay(forPoints image: CIImage, topLeft: CGPoint, topRight: CGPoint, bottomLeft: CGPoint, bottomRight: CGPoint) -> CIImage {
         var overlay = CIImage(color: CIColor(red: CGFloat(1), green: CGFloat(0), blue: CGFloat(0), alpha: CGFloat(0.6)))
-        overlay = overlay.cropping(to: image.extent)
-        overlay = overlay.applyingFilter("CIPerspectiveTransformWithExtent", withInputParameters: ["inputExtent": CIVector(cgRect: image.extent), "inputTopLeft": CIVector(cgPoint: topLeft), "inputTopRight": CIVector(cgPoint:topRight), "inputBottomLeft": CIVector(cgPoint:bottomLeft), "inputBottomRight": CIVector(cgPoint:bottomRight)]) //applyingFilter("CIPerspectiveTransformWithExtent", withInputParameters: ["inputExtent": CIVector(cgRect: image.extent()), "inputTopLeft": CIVector(topLeft), "inputTopRight": CIVector(topRight), "inputBottomLeft": CIVector(bottomLeft), "inputBottomRight": CIVector(bottomRight)])
-        return overlay.compositingOverImage(image)
+        overlay = overlay.cropped(to: image.extent)
+        overlay = overlay.applyingFilter("CIPerspectiveTransformWithExtent", parameters: ["inputExtent": CIVector(cgRect: image.extent), "inputTopLeft": CIVector(cgPoint: topLeft), "inputTopRight": CIVector(cgPoint:topRight), "inputBottomLeft": CIVector(cgPoint:bottomLeft), "inputBottomRight": CIVector(cgPoint:bottomRight)]) //applyingFilter("CIPerspectiveTransformWithExtent", withInputParameters: ["inputExtent": CIVector(cgRect: image.extent()), "inputTopLeft": CIVector(topLeft), "inputTopRight": CIVector(topRight), "inputBottomLeft": CIVector(bottomLeft), "inputBottomRight": CIVector(bottomRight)])
+        return overlay.composited(over: image)
     }
     
     func cropRect(forPreviewImage image: CIImage) -> CGRect {
@@ -328,7 +335,7 @@ class VNCameraScanner:UIView, AVCaptureVideoDataOutputSampleBufferDelegate {
         hideGLKView(true)
     }
     
-    func enableBorderDetectFrame() {
+    @objc func enableBorderDetectFrame() {
         borderDetectFrame = true
     }
     
@@ -376,8 +383,8 @@ class VNCameraScanner:UIView, AVCaptureVideoDataOutputSampleBufferDelegate {
         captureQueue.suspend()
         var videoConnection: AVCaptureConnection? = nil
         for connection: AVCaptureConnection in stillImageOutput?.connections as! [AVCaptureConnection] {
-            for port: AVCaptureInputPort in connection.inputPorts as! [AVCaptureInputPort] {
-                if port.mediaType.isEqual(AVMediaTypeVideo) {
+            for port: AVCaptureInput.Port in connection.inputPorts {
+                if port.mediaType == AVMediaType.video{
                     videoConnection = connection
                     break
                 }
@@ -388,7 +395,7 @@ class VNCameraScanner:UIView, AVCaptureVideoDataOutputSampleBufferDelegate {
         }
         weak var weakSelf = self
         
-        stillImageOutput?.captureStillImageAsynchronously(from: videoConnection, completionHandler: {(_ imageSampleBuffer: CMSampleBuffer?, _ error: Error?) -> Void in
+        stillImageOutput?.captureStillImageAsynchronously(from: videoConnection!, completionHandler: {(_ imageSampleBuffer: CMSampleBuffer?, _ error: Error?) -> Void in
             if error != nil {
                 self.captureQueue.resume()
                 return
@@ -396,7 +403,7 @@ class VNCameraScanner:UIView, AVCaptureVideoDataOutputSampleBufferDelegate {
             let filePath: String =  NSTemporaryDirectory().stringByAppendingPathComponent(path: "vn_img_\(Int(Date().timeIntervalSince1970)).jpeg")//URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("vn_img_\(Int(Date().timeIntervalSince1970)).jpeg").absoluteString
             
             autoreleasepool {
-                var imageData: Data? = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(imageSampleBuffer)
+                var imageData: Data? = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(imageSampleBuffer!)
                 let image:UIImage = UIImage(data: imageData!)!
                 var enhancedImage = CIImage(data: imageData!, options: [kCIImageColorSpace: NSNull()])
                 imageData = nil
@@ -477,7 +484,7 @@ class VNCameraScanner:UIView, AVCaptureVideoDataOutputSampleBufferDelegate {
         rectangleCoordinates["inputTopRight"] = CIVector(cgPoint: rectangleFeature.topRight)
         rectangleCoordinates["inputBottomLeft"] = CIVector(cgPoint: rectangleFeature.bottomLeft)
         rectangleCoordinates["inputBottomRight"] = CIVector(cgPoint: rectangleFeature.bottomRight)
-        return image.applyingFilter("CIPerspectiveCorrection", withInputParameters: rectangleCoordinates)
+        return image.applyingFilter("CIPerspectiveCorrection", parameters: rectangleCoordinates)
     }
 }
 
@@ -492,7 +499,7 @@ public extension DispatchQueue {
      - parameter token: A unique reverse DNS style name such as com.vectorform.<name> or a GUID
      - parameter block: Block to execute once
      */
-    public class func once(token: String, block:(Void)->Void) {
+    public class func once(token: String, block:()->Void) {
         objc_sync_enter(self); defer { objc_sync_exit(self) }
         
         if _onceTracker.contains(token) {

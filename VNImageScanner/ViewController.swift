@@ -109,7 +109,7 @@ class ViewController: UIViewController {
         })
     }
     
-    func dismissPreview(_ dismissTap: UITapGestureRecognizer) {
+    @objc func dismissPreview(_ dismissTap: UITapGestureRecognizer) {
         UIView.animate(withDuration: 0.7, delay: 0.0, usingSpringWithDamping: 0.8, initialSpringVelocity: 1.0, options: .allowUserInteraction, animations: {() -> Void in
             dismissTap.view?.frame = self.view.bounds.offsetBy(dx: CGFloat(0), dy: CGFloat(self.view.bounds.size.height))
         }, completion: {(_ finished: Bool) -> Void in
