@@ -32,4 +32,4 @@ Varun Naharia | Stackoverflow: [varun-naharia](http://stackoverflow.com/users/38
  - Smoother animation between border detection frames
  - Improve confidence
  
- Improvements are needed so pull resqest are welcome.
+ Improvements are needed so pull requests are welcome.
