@@ -1,3 +1,8 @@
+![](https://img.shields.io/github/issues/varun-naharia/VNImageScanner)
+![](https://img.shields.io/github/forks/varun-naharia/VNImageScanner)
+![](https://img.shields.io/github/stars/varun-naharia/VNImageScanner)
+![GitHub All Releases](https://img.shields.io/github/downloads/varun-naharia/VNImageScanner/total)
+
 ![Screenshot](https://raw.githubusercontent.com/mmackh/IPDFCameraViewController/master/mockup.png)
 
 # VNImageScanner
