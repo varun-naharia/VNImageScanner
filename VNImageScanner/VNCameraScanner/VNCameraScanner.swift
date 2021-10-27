@@ -72,8 +72,8 @@ class VNCameraScanner:UIView, AVCaptureVideoDataOutputSampleBufferDelegate {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        NotificationCenter.default.addObserver(self, selector: #selector(self._backgroundMode), name: NSNotification.Name.UIApplicationWillResignActive, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self._foregroundMode), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self._backgroundMode), name: UIApplication.willResignActiveNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self._foregroundMode), name: UIApplication.didBecomeActiveNotification, object: nil)
         captureQueue = DispatchQueue(label: "com.instapdf.AVCameraCaptureQueue")
     }
     
@@ -101,7 +101,7 @@ class VNCameraScanner:UIView, AVCaptureVideoDataOutputSampleBufferDelegate {
         view.drawableDepthFormat = GLKViewDrawableDepthFormat.format24
         insertSubview(view, at: 0)
         glkView = view
-        coreImageContext = CIContext(eaglContext: context!, options: [kCIContextWorkingColorSpace: NSNull(), kCIContextUseSoftwareRenderer: (false)])
+        coreImageContext = CIContext(eaglContext: context!, options: convertToOptionalCIContextOptionDictionary([convertFromCIContextOption(CIContextOption.workingColorSpace): NSNull(), convertFromCIContextOption(CIContextOption.useSoftwareRenderer): (false)]))
     }
     func setupCameraView() {
         createGLKView()
@@ -219,11 +219,11 @@ class VNCameraScanner:UIView, AVCaptureVideoDataOutputSampleBufferDelegate {
     }
     
     func filteredImageUsingEnhanceFilter(on image: CIImage) -> CIImage {
-        return (CIFilter(name: "CIColorControls", withInputParameters: [kCIInputImageKey:image, "inputBrightness": NSNumber(value: 0.0), "inputContrast":NSNumber(value: 1.14), "inputSaturation": NSNumber(value: 0.0)])?.outputImage)!
+        return (CIFilter(name: "CIColorControls", parameters: [kCIInputImageKey:image, "inputBrightness": NSNumber(value: 0.0), "inputContrast":NSNumber(value: 1.14), "inputSaturation": NSNumber(value: 0.0)])?.outputImage)!
     }
     
     func filteredImageUsingContrastFilter(on image: CIImage) -> CIImage {
-        return CIFilter(name: "CIColorControls", withInputParameters: ["inputContrast": (1.1), kCIInputImageKey: image])!.outputImage!
+        return CIFilter(name: "CIColorControls", parameters: ["inputContrast": (1.1), kCIInputImageKey: image])!.outputImage!
     }
     
     func _biggestRectangle(inRectangles rectangles: [Any]) -> CIRectangleFeature? {
@@ -405,7 +405,7 @@ class VNCameraScanner:UIView, AVCaptureVideoDataOutputSampleBufferDelegate {
             autoreleasepool {
                 var imageData: Data? = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(imageSampleBuffer!)
                 let image:UIImage = UIImage(data: imageData!)!
-                var enhancedImage = CIImage(data: imageData!, options: [kCIImageColorSpace: NSNull()])
+                var enhancedImage = CIImage(data: imageData!, options: convertToOptionalCIImageOptionDictionary([convertFromCIImageOption(CIImageOption.colorSpace): NSNull()]))
                 imageData = nil
                 if weakSelf?.cameraViewType == VNCameraViewType.blackAndWhite {
                     enhancedImage = self.filteredImageUsingEnhanceFilter(on: enhancedImage!)
@@ -435,7 +435,7 @@ class VNCameraScanner:UIView, AVCaptureVideoDataOutputSampleBufferDelegate {
                 }
                 var ctx: CIContext? = nil
                 if ctx == nil {
-                    ctx = CIContext(options: [kCIContextWorkingColorSpace: NSNull()])
+                    ctx = CIContext(options: convertToOptionalCIContextOptionDictionary([convertFromCIContextOption(CIContextOption.workingColorSpace): NSNull()]))
                 }
                 var bounds: CGSize = (enhancedImage?.extent.size)!
 //                bounds = CGSize(width: CGFloat(floorf(bounds.width / 4) * 4), height: CGFloat(floorf(bounds.height / 4) * 4))
@@ -446,7 +446,7 @@ class VNCameraScanner:UIView, AVCaptureVideoDataOutputSampleBufferDelegate {
                 let totalBytes: uint = uint(Float(rowBytes) * Float(bounds.height))
                 let byteBuffer = malloc(Int(totalBytes))
                 let colorSpace: CGColorSpace? = CGColorSpaceCreateDeviceRGB()
-                ctx?.render(enhancedImage!, toBitmap: byteBuffer!, rowBytes: Int(rowBytes), bounds: extent, format: kCIFormatRGBA8, colorSpace: colorSpace)
+                ctx?.render(enhancedImage!, toBitmap: byteBuffer!, rowBytes: Int(rowBytes), bounds: extent, format: CIFormat.RGBA8, colorSpace: colorSpace)
                 let bitmapContext = CGContext(data: byteBuffer, width: Int(bounds.width), height: Int(bounds.height), bitsPerComponent: bytesPerPixel, bytesPerRow: Int(rowBytes), space: colorSpace!, bitmapInfo: CGImageAlphaInfo.noneSkipLast.rawValue)//kCGImageAlphaNoneSkipLast)
                 let imgRef: CGImage? = bitmapContext?.makeImage()
                 free(byteBuffer)
@@ -529,3 +529,25 @@ extension String {
 //        self.bottomLeft = feature.bottomLeft
 //    }
 //}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertToOptionalCIContextOptionDictionary(_ input: [String: Any]?) -> [CIContextOption: Any]? {
+	guard let input = input else { return nil }
+	return Dictionary(uniqueKeysWithValues: input.map { key, value in (CIContextOption(rawValue: key), value)})
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromCIContextOption(_ input: CIContextOption) -> String {
+	return input.rawValue
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertToOptionalCIImageOptionDictionary(_ input: [String: Any]?) -> [CIImageOption: Any]? {
+	guard let input = input else { return nil }
+	return Dictionary(uniqueKeysWithValues: input.map { key, value in (CIImageOption(rawValue: key), value)})
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromCIImageOption(_ input: CIImageOption) -> String {
+	return input.rawValue
+}

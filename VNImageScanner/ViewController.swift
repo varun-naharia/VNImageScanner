@@ -33,7 +33,7 @@ class ViewController: UIViewController {
     }
     
     @IBAction func focusGesture(_ sender: UITapGestureRecognizer) {
-        if sender.state == UIGestureRecognizerState.recognized {
+        if sender.state == UIGestureRecognizer.State.recognized {
             let location: CGPoint = sender.location(in: self.cameraViewController)
             focusIndicatorAnimate(to: location)
             cameraViewController.focus(at: location, completionHandler: {() -> Void in
@@ -82,9 +82,9 @@ class ViewController: UIViewController {
         
 //        let animation = CATransition.animation()
         let animation:CATransition = CATransition()
-        animation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseOut)
-        animation.type = kCATransitionPush
-        animation.subtype = kCATransitionFromBottom
+        animation.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeOut)
+        animation.type = CATransitionType.push
+        animation.subtype = CATransitionSubtype.fromBottom
         animation.duration = 0.35
         titleLabel?.layer.add(animation, forKey: "kCATransitionFade")
         let filterMode: String = (cameraViewController.cameraViewType == VNCameraViewType.blackAndWhite) ? "TEXT FILTER" : "COLOR FILTER"
